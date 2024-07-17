@@ -12,7 +12,8 @@ authController.loginWithEmail = catchAsync(async (req, res, next) => {
   //validation
 
   const user = await User.findOne({ email }, "+password");
-  if (!user) throw AppError(400, "Invalid Credentials", "Login Error");
+  if (!user)
+    throw new AppError(400, "Invalid Email or Password", "Login Error");
   //process
   // bcript will check human typed password with the password in database and compare it
   const isMatch = await bcript.compare(password, user.password);

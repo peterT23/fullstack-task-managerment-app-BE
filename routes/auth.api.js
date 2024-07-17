@@ -17,20 +17,18 @@ router.post(
     body("email", "Invalid Email")
       .exists()
       .notEmpty()
-      .withMessage("email is required and unique")
+      .withMessage("email is required")
       .isEmail()
       .normalizeEmail({ gmail_remove_dots: false }),
-    body("password", "Invalid Password")
-      .exists()
-      .notEmpty()
-      .isLength({ min: 8 })
-      .withMessage("Pass word must be at least 8 characters long")
-      .matches(/[a-z]/)
-      .withMessage("Password must contain at least one lowercase letter")
-      .matches(/[A-Z]/)
-      .withMessage("Password must contain at least one uppercase letter")
-      .matches(/\d/)
-      .withMessage("Password must contain at least one number"),
+    body("password", "Invalid Password").exists().notEmpty(),
+    // .isLength({ min: 8 }),
+    // .withMessage("Pass word must be at least 8 characters long")
+    // .matches(/[a-z]/)
+    // .withMessage("Password must contain at least one lowercase letter")
+    // .matches(/[A-Z]/)
+    // .withMessage("Password must contain at least one uppercase letter")
+    // .matches(/\d/)
+    // .withMessage("Password must contain at least one number"),
   ]),
   authController.loginWithEmail
 );

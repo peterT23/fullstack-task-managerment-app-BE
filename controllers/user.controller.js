@@ -196,8 +196,8 @@ userController.getUsers = catchAsync(async (req, res, next) => {
 
   let { page, limit, ...filter } = { ...req.query };
 
-  page = parseInt(page) || 1;
-  limit = parseInt(limit) || 15;
+  page = parseInt(page);
+  limit = parseInt(limit);
   //validation
   const filterConditions = [{ isDeleted: false }];
 
@@ -212,14 +212,14 @@ userController.getUsers = catchAsync(async (req, res, next) => {
     : {};
 
   const count = await User.countDocuments(filterCriteria);
+
   const totalPages = Math.ceil(count / limit);
   const offset = limit * (page - 1);
 
   let users = await User.find(filterCriteria)
-    .sort({ createAt: -1 })
     .skip(offset)
-    .limit(limit);
-
+    .limit(limit)
+    .sort({ createdAt: -1 });
   //response
   return sendResponse(
     res,

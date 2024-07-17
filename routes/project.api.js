@@ -49,10 +49,12 @@ router.post(
     // }),
     body("status")
       .optional()
+      .default("pending")
       .isIn(["pending", "ongoing", "review", "done", "archive"])
       .withMessage("Invalid status"),
     body("priority")
       .optional()
+      .default("low")
       .isIn(["low", "medium", "high"])
       .withMessage("Invalid priority"),
   ]),

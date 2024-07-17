@@ -120,13 +120,13 @@ projectController.createNewProject = catchAsync(async (req, res, next) => {
       await calculateProjectCount(assigneeId, "assignees");
     }
   }
-  project = await project.populate("manager");
+  project = await project.populate("assignees");
 
   return sendResponse(
     res,
     200,
     true,
-    project,
+    { project },
     null,
     "create project successfully"
   );
@@ -353,6 +353,14 @@ projectController.getProjects = catchAsync(async (req, res, next) => {
       title: { $regex: filter.title, $options: "i" }, //case sensitive
     });
   }
+  if (
+    filter.status &&
+    ["pending", "ongoing", "review", "done", "archive"].includes(filter.status)
+  ) {
+    filterConditions.push({
+      status: filter.status,
+    });
+  }
   const filterCriteria = filterConditions.length
     ? { $and: filterConditions }
     : {};
@@ -362,9 +370,12 @@ projectController.getProjects = catchAsync(async (req, res, next) => {
   const offset = limit * (page - 1);
 
   let projects = await Project.find(filterCriteria)
-    .sort({ createAt: -1 })
+    .sort({ createdAt: -1 })
     .skip(offset)
-    .limit(limit);
+    .limit(limit)
+    .populate("manager")
+    .populate("assignees");
+
   return sendResponse(
     res,
     200,
@@ -494,7 +505,7 @@ projectController.getTasksOfProject = catchAsync(async (req, res, next) => {
   const totalPages = Math.ceil(count / limit);
   const offset = limit * (page - 1);
   const tasks = await Task.find({ projectId })
-    .sort({ createAt: -1 })
+    .sort({ createdAt: -1 })
     .skip(offset)
     .limit(limit);
 

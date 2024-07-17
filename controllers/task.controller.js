@@ -427,7 +427,7 @@ taskController.getCommentsOfTask = catchAsync(async (req, res, next) => {
   const totalPages = Math.ceil(count / limit);
   const offset = limit * (page - 1);
   const comments = await Comment.find({ taskId })
-    .sort({ createAt: -1 })
+    .sort({ createdAt: -1 })
     .skip(offset)
     .limit(limit);
 

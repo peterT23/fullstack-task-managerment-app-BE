@@ -6,14 +6,14 @@ const validators = require("../middlewares/validators");
 const authentication = require("../middlewares/authentication");
 
 /**
- * @route POST /users
+ * @route POST /users/register
  * @description Register new user as Manager
  * @body {name, email, password, role}
  * @access Public
  */
 
 router.post(
-  "/",
+  "/register",
   validators.validate([
     body("name", "Invalid Name").exists().isString().notEmpty(),
     body("email", "Invalid Email")
@@ -33,7 +33,7 @@ router.post(
       .exists()
       .notEmpty()
       .equals("manager")
-      .withMessage("Only manager can create new users"),
+      .withMessage("Only manager can register account"),
     body("description")
       .optional()
       .isString()
