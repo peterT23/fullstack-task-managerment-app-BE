@@ -161,6 +161,29 @@ router.put(
   ]),
   projectController.assignProjectToMember
 );
+/**
+ * @route put /projects/:id/assignees
+ * @description // Assign project to users by ID
+ * @access Login required
+ */
+router.put(
+  "/:id/assignees",
+  authentication.loginRequired,
+  validators.validate([
+    param("id").exists().isString().custom(validators.checkObjectId),
+    body("assignees")
+      .exists()
+      .isArray()
+      .custom((value) => {
+        if (!Array.isArray(value)) {
+          throw new Error("Assignees must be an array");
+        }
+        value.forEach((id) => validators.checkObjectId(id));
+        return true;
+      }),
+  ]),
+  projectController.assignProjectToMembers
+);
 
 /**
  * @route put /projects/:id/unassign

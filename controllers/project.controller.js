@@ -144,6 +144,7 @@ projectController.updateProject = catchAsync(async (req, res, next) => {
   const currentUserId = req.userId;
   const currentRole = req.role;
   const projectId = req.params.id;
+  console.log("first", projectId);
   let {
     title,
     description,
@@ -165,7 +166,7 @@ projectController.updateProject = catchAsync(async (req, res, next) => {
       "Project update Error"
     );
 
-  const project = await Project.findOne({ _id: projectId, isDeleted: true });
+  let project = await Project.findOne({ _id: projectId, isDeleted: false });
   if (!project)
     throw new AppError(400, "The project is not existed", "Edit project error");
 
@@ -202,7 +203,7 @@ projectController.updateProject = catchAsync(async (req, res, next) => {
     "priority",
     "assignees",
   ];
-  req.body.assignees.unshift(currentUserId);
+  // req.body.assignees.unshift(currentUserId);
   allows.forEach((field) => {
     if (req.body[field] !== undefined) {
       project[field] = req.body[field];
@@ -216,13 +217,15 @@ projectController.updateProject = catchAsync(async (req, res, next) => {
       await calculateProjectCount(assigneeId, "assignees");
     }
   }
+  project = await project.populate("assignees");
+  project = await project.populate("manager");
 
   //response
   return sendResponse(
     res,
     200,
     true,
-    project,
+    { project },
     null,
     "create project successfully"
   );
@@ -296,7 +299,7 @@ projectController.deleteSingleProject = catchAsync(async (req, res, next) => {
     res,
     200,
     true,
-    project,
+    { project },
     null,
     "Delete Project successfully"
   );
@@ -429,6 +432,74 @@ projectController.assignProjectToMember = catchAsync(async (req, res, next) => {
 });
 
 /**
+ * @route put /projects/:id/assignees
+ * @description // Assign project to users by ID
+ * @access Login required
+ */
+
+projectController.assignProjectToMembers = catchAsync(
+  async (req, res, next) => {
+    //getdata from req
+    const projectId = req.params.id;
+    const { assignees } = req.body;
+    const currentRole = req.role;
+    const currentUserId = req.userId;
+
+    //validation
+    if (currentRole === "member")
+      throw new AppError(
+        403,
+        "You do not have permission to perform the action",
+        "Project update Error"
+      );
+
+    let project = await Project.findOne({ _id: projectId, isDeleted: false });
+    if (!project) throw new AppError(404, "Bad request", "Project not found");
+
+    if (assignees && assignees.length > 0) {
+      for (const assigneeId of assignees) {
+        const check = await User.find({ _id: assigneeId, isDeleted: false });
+        console.log(check);
+        if (check.length === 0)
+          throw new AppError(404, `Assignee ${assigneeId} not found`);
+      }
+    }
+
+    if (assignees && assignees.length > 0) {
+      for (const assigneeId of assignees) {
+        const check = project.assignees.includes(assigneeId);
+        if (check) {
+          throw new AppError(
+            404,
+            `Assignee ${assigneeId} is already assigned `
+          );
+        }
+      }
+    }
+    project.assignees.push(...assignees);
+
+    await project.save();
+
+    // Update project count for each assignee
+    if (assignees && assignees.length > 0) {
+      for (const assigneeId of assignees) {
+        await calculateProjectCount(assigneeId, "assignees");
+      }
+    }
+    project = await project.populate("assignees");
+    //response
+    sendResponse(
+      res,
+      200,
+      true,
+      { project },
+      null,
+      "Assign Project successfully"
+    );
+  }
+);
+
+/**
  * @route put /projects/:id/unassign
  * @description // unAssign project from user by ID
  * @access Login required
@@ -452,7 +523,7 @@ projectController.unAssignProjectFromMember = catchAsync(
       );
 
     //hồi đầu sử dụng findByid nhưng mà khi xoá mềm id đó vẫn còn tồn tại nên sử dụng findOne
-    const project = await Project.findOne({ _id: projectId, isDeleted: false });
+    let project = await Project.findOne({ _id: projectId, isDeleted: false });
     if (!project) throw new AppError(404, "Bad request", "Project not found");
 
     const user = await User.findOne({ _id: assignee, isDeleted: false });
@@ -471,7 +542,9 @@ projectController.unAssignProjectFromMember = catchAsync(
     }
     //update projectCount
     await project.save();
+
     await calculateProjectCount(assignee, "assignees");
+    project = await project.populate("assignees");
     sendResponse(
       res,
       200,
