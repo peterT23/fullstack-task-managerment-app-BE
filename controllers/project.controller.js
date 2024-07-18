@@ -327,7 +327,7 @@ projectController.getSingleProject = catchAsync(async (req, res, next) => {
     res,
     200,
     true,
-    project,
+    { project },
     null,
     "get single project successfully"
   );
@@ -353,6 +353,7 @@ projectController.getProjects = catchAsync(async (req, res, next) => {
       title: { $regex: filter.title, $options: "i" }, //case sensitive
     });
   }
+
   if (
     filter.status &&
     ["pending", "ongoing", "review", "done", "archive"].includes(filter.status)
