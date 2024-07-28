@@ -89,6 +89,16 @@ taskController.createNewTask = catchAsync(async (req, res, next) => {
   if (start > due)
     throw new AppError(400, "Start date must be before due date");
 
+  const pendingTasks = await Task.find({
+    status: "pending",
+    projectId,
+    isDeleted: false,
+  })
+    .sort({ order: -1 })
+    .limit(1);
+
+  const order = pendingTasks.length > 0 ? pendingTasks[0].order + 1 : 1;
+
   let task = await Task.create({
     title,
     description,
@@ -96,6 +106,7 @@ taskController.createNewTask = catchAsync(async (req, res, next) => {
     dueDate,
     status,
     assignees,
+    order,
     priority,
     projectId,
   });
@@ -109,6 +120,7 @@ taskController.createNewTask = catchAsync(async (req, res, next) => {
   await calculateTaskInProject(projectId);
 
   task = await task.populate("projectId");
+  task = await task.populate("assignees");
 
   return sendResponse(
     res,

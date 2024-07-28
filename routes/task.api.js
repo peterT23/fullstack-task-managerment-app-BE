@@ -45,6 +45,7 @@ router.post(
     body("status")
       .optional()
       .isIn(["pending", "ongoing", "review", "done", "archive"])
+      .default("pending")
       .withMessage("Invalid status"),
     body("priority")
       .optional()
@@ -54,6 +55,19 @@ router.post(
       .notEmpty()
       .custom(validators.checkObjectId)
       .withMessage("invalid project"),
+    body("assignees")
+      .optional()
+      .isArray()
+      .withMessage("Assignees must be an array")
+      .custom((assignees) => {
+        for (const id of assignees) {
+          if (!validators.checkObjectId(id)) {
+            throw new Error("Invalid assignee ID");
+          }
+        }
+        return true;
+      })
+      .withMessage("Invalid assignee ID"),
   ]),
   taskController.createNewTask
 );

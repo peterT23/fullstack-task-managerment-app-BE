@@ -20,6 +20,7 @@ const taskSchema = Schema(
     },
     projectId: { type: Schema.ObjectId, required: true, ref: "Project" },
     assignees: [{ type: Schema.ObjectId, required: true, ref: "User" }],
+    order: { type: Number },
     commentCount: { type: Number, default: 0 },
     isDeleted: { type: Boolean, default: false, select: false },
   },

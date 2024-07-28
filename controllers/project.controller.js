@@ -571,7 +571,7 @@ projectController.getTasksOfProject = catchAsync(async (req, res, next) => {
   const limit = parseInt(req.query.limit) || 10;
 
   const project = await Project.findOne({ _id: projectId, isDeleted: false });
-  console.log(project);
+
   if (!project)
     throw new AppError(400, "Project not found", "Get Tasks of Project Error");
 
@@ -592,5 +592,141 @@ projectController.getTasksOfProject = catchAsync(async (req, res, next) => {
     "Get tasks successfully"
   );
 });
+
+/**
+ * @route GET /projects/:id/tasksbystatus
+ * @description Get tasks of a projects by status
+ * @access Login required
+ */
+
+projectController.getTasksOfProjectByStatus = catchAsync(
+  async (req, res, next) => {
+    //get data
+    const currentUserId = req.userId;
+    const currentRole = req.role;
+    const projectId = req.params.id;
+
+    //validation
+    const project = await Project.findOne({ _id: projectId, isDeleted: false });
+
+    if (!project)
+      throw new AppError(
+        400,
+        "Project not found",
+        "Get Tasks by status of Project Error"
+      );
+
+    const tasks = await Task.find({ projectId, isDeleted: false })
+      .sort({
+        order: 1,
+      })
+      .populate("assignees");
+    if (!tasks) {
+      throw new AppError(
+        400,
+        "The task has not created yet",
+        "Get Tasks by status of Project Error"
+      );
+    }
+    const tasksByStatusCollection = tasks.reduce((acc, task) => {
+      const { status } = task;
+      if (!acc[status]) {
+        acc[status] = [];
+      }
+      acc[status].push(task);
+      return acc;
+    }, {});
+
+    const defaultValue = {
+      pending: [],
+      ongoing: [],
+      review: [],
+      done: [],
+      archive: [],
+    };
+
+    const tasksByStatus = { ...defaultValue, ...tasksByStatusCollection };
+    return sendResponse(
+      res,
+      200,
+      true,
+      { tasksByStatus },
+      null,
+      "Get tasks successfully"
+    );
+  }
+);
+
+projectController.updateTaskStatusAndOrder = catchAsync(
+  async (req, res, next) => {
+    const currentUserId = req.userId;
+    const currentRole = req.role;
+    const projectId = req.params.id;
+    const { updatedTasks } = req.body;
+    console.log("updatedTask", updatedTasks);
+    //validation
+    const project = await Project.findOne({ _id: projectId, isDeleted: false });
+
+    if (!project)
+      throw new AppError(
+        400,
+        "Project not found",
+        "Get Tasks by status of Project Error"
+      );
+    const bulkOps = updatedTasks?.map((task) => ({
+      updateOne: {
+        filter: { _id: task._id, projectId },
+        update: { $set: { order: task.order, status: task.status } },
+      },
+    }));
+
+    const tasks = await Task.find({ projectId, isDeleted: false }).sort({
+      order: 1,
+    });
+    if (!tasks) {
+      throw new AppError(
+        400,
+        "The task has not created yet",
+        "Get Tasks by status of Project Error"
+      );
+    }
+    const tasksByStatusCollection = tasks.reduce((acc, task) => {
+      const { status } = task;
+      if (!acc[status]) {
+        acc[status] = [];
+      }
+      acc[status].push(task);
+      return acc;
+    }, {});
+
+    const defaultValue = {
+      pending: [],
+      ongoing: [],
+      review: [],
+      done: [],
+      archive: [],
+    };
+
+    const tasksByStatus = { ...defaultValue, ...tasksByStatusCollection };
+
+    try {
+      await Task.bulkWrite(bulkOps);
+      sendResponse(
+        res,
+        200,
+        true,
+        { tasksByStatus, updatedTasks },
+        null,
+        "Get tasks successfully"
+      );
+    } catch (err) {
+      throw new AppError(
+        400,
+        "Tasks reordered and updated fail",
+        "Update Tasks status,order of Project Error"
+      );
+    }
+  }
+);
 
 module.exports = projectController;

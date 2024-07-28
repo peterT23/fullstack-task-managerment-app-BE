@@ -214,5 +214,35 @@ router.get(
   ]),
   projectController.getTasksOfProject
 );
+/**
+ * @route GET /projects/:id/tasks/status
+ * @description Get tasks of a projects
+ * @access Login required
+ */
+
+router.get(
+  "/:id/tasks/status",
+  authentication.loginRequired,
+  validators.validate([
+    param("id").exists().isString().custom(validators.checkObjectId),
+  ]),
+  projectController.getTasksOfProjectByStatus
+);
+
+/**
+ * @route PUT /projects/:id/tasks/reorder
+ * @description update  task order, task status  of a projects
+ * @access Login required
+ */
+
+router.put(
+  "/:id/tasks/reorder",
+  authentication.loginRequired,
+  validators.validate([
+    param("id").exists().isString().custom(validators.checkObjectId),
+    // body("updatedTask").exists().isString().custom(validators.checkObjectId),
+  ]),
+  projectController.updateTaskStatusAndOrder
+);
 
 module.exports = router;
