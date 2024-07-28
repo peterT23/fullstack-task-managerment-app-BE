@@ -717,7 +717,7 @@ projectController.updateTaskStatusAndOrder = catchAsync(
         true,
         { tasksByStatus, updatedTasks },
         null,
-        "Get tasks successfully"
+        "Update tasks successfully"
       );
     } catch (err) {
       throw new AppError(

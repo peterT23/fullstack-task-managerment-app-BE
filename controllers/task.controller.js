@@ -273,6 +273,19 @@ taskController.deleteSingleTask = catchAsync(async (req, res, next) => {
   const projectId = task.projectId;
   await calculateTaskInProject(projectId);
 
+  //Update order of remaining tasks in the same project and status
+  const tasksToUpdate = await Task.find({
+    projectId: projectId,
+    status: task.status,
+    isDeleted: false,
+  }).sort("order");
+
+  //khôg dùng được forEach vì await chỉ để trong async function
+  for (let i = 0; i < tasksToUpdate.length; i++) {
+    tasksToUpdate[i].order = i + 1;
+    await tasksToUpdate[i].save();
+  }
+
   //response
   return sendResponse(
     res,

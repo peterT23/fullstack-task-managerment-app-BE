@@ -240,7 +240,28 @@ router.put(
   authentication.loginRequired,
   validators.validate([
     param("id").exists().isString().custom(validators.checkObjectId),
-    // body("updatedTask").exists().isString().custom(validators.checkObjectId),
+    body("updatedTasks")
+      .isArray()
+      .withMessage("updatedTasks must be an array")
+      .custom((tasks) => {
+        for (const task of tasks) {
+          if (!validators.checkObjectId(task._id)) {
+            throw new Error("Invalid task ID");
+          }
+          if (typeof task.order !== "number") {
+            throw new Error("Task order must be a number");
+          }
+          if (
+            !["pending", "ongoing", "review", "done", "archive"].includes(
+              task.status
+            )
+          ) {
+            throw new Error("Invalid task status");
+          }
+        }
+        return true;
+      })
+      .withMessage("Invalid updatedTasks array"),
   ]),
   projectController.updateTaskStatusAndOrder
 );
