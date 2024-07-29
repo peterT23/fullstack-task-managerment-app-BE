@@ -109,6 +109,16 @@ router.put(
       .optional()
       .isIn(["low", "medium", "high"])
       .withMessage("Invalid priority"),
+    body("assignees")
+      .exists()
+      .isArray()
+      .custom((value) => {
+        if (!Array.isArray(value)) {
+          throw new Error("Assignees must be an array");
+        }
+        value.forEach((id) => validators.checkObjectId(id));
+        return true;
+      }),
     param("id").exists().isString().custom(validators.checkObjectId),
   ]),
   taskController.updateTask

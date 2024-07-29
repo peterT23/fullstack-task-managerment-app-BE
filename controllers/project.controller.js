@@ -319,7 +319,10 @@ projectController.getSingleProject = catchAsync(async (req, res, next) => {
   const targetProjectId = req.params.id;
   //validation
   // let project = Project.findById(targetProjectId);
-  let project = Project.findOne({ _id: targetProjectId, isDeleted: false });
+  let project = await Project.findOne({
+    _id: targetProjectId,
+    isDeleted: false,
+  });
   if (!project)
     throw new AppError(400, "Project not found", "Get Project Error");
 

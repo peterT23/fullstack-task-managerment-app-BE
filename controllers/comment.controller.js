@@ -104,6 +104,7 @@ commentController.deleteComment = catchAsync(async (req, res, next) => {
   const currentUserId = req.userId;
   const currentRole = req.role;
   const commentId = req.params.id;
+  const { taskId } = req.body;
 
   // validation
 
@@ -111,7 +112,7 @@ commentController.deleteComment = catchAsync(async (req, res, next) => {
   if (!comment)
     throw new AppError(400, "The comment is not exist", "Edit comment error");
 
-  if (!currentUserId === comment.commentUser)
+  if (currentUserId !== comment.commentUser._id)
     throw new AppError(
       403,
       "You do not have permission to perform the action",
@@ -123,6 +124,8 @@ commentController.deleteComment = catchAsync(async (req, res, next) => {
     { isDeleted: true },
     { new: true }
   );
+
+  await calculateCommentInTask(taskId);
 
   //response
   return sendResponse(

@@ -218,6 +218,8 @@ taskController.updateTask = catchAsync(async (req, res, next) => {
       await calculateTaskCount(assigneeId, "assignees");
     }
   }
+  await task.populate("assignees");
+  await task.populate("projectId");
 
   //response
   return sendResponse(res, 200, true, { task }, null, "edit task successfully");
@@ -454,7 +456,8 @@ taskController.getCommentsOfTask = catchAsync(async (req, res, next) => {
   const comments = await Comment.find({ taskId })
     .sort({ createdAt: -1 })
     .skip(offset)
-    .limit(limit);
+    .limit(limit)
+    .populate("commentUser");
 
   return sendResponse(
     res,
