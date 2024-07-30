@@ -27,11 +27,18 @@ meController.getCurrentUser = catchAsync(async (req, res, next) => {
   );
 });
 
-meController.updateUserProfile = catchAsync(async (req, res, next) => {
+meController.updateMeProfile = catchAsync(async (req, res, next) => {
   // get data from request
   const currentUserId = req.userId;
+  const userId = req.params.id;
 
   //validation
+
+  if (currentUserId !== userId)
+    throw new AppError(
+      400,
+      "You do not have permission to perform this action"
+    );
 
   let user = await User.findOne({ _id: currentUserId, isDeleted: false });
   if (!user) throw new AppError(400, "User not found", "Update User Error");
@@ -46,6 +53,7 @@ meController.updateUserProfile = catchAsync(async (req, res, next) => {
     "linkedinLink",
     "twitterLink",
     "phone",
+    "jobTitle",
   ];
 
   const updateUserField = Object.keys(req.body);
@@ -67,7 +75,7 @@ meController.updateUserProfile = catchAsync(async (req, res, next) => {
   await user.save();
 
   //response
-  return sendResponse(res, 200, true, user, null, "Update user successful");
+  return sendResponse(res, 200, true, user, null, "Update profile successful");
 });
 
 module.exports = meController;

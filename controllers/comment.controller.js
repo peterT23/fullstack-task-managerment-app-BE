@@ -24,7 +24,7 @@ const calculateCommentInTask = async (taskId) => {
 commentController.createNewComment = catchAsync(async (req, res, next) => {
   //get data from req
   const currentUserId = req.userId;
-  const { taskId, content } = req.body;
+  const { taskId, content, referenceDocument, documentType } = req.body;
 
   //validation
   const task = await Task.findOne({ _id: taskId, isDeleted: false });
@@ -35,6 +35,8 @@ commentController.createNewComment = catchAsync(async (req, res, next) => {
     commentUser: currentUserId,
     content,
     taskId,
+    referenceDocument,
+    documentType,
   });
 
   // update comment count of the post
@@ -112,12 +114,12 @@ commentController.deleteComment = catchAsync(async (req, res, next) => {
   if (!comment)
     throw new AppError(400, "The comment is not exist", "Edit comment error");
 
-  if (currentUserId !== comment.commentUser._id)
-    throw new AppError(
-      403,
-      "You do not have permission to perform the action",
-      "Delete comment Error"
-    );
+  // if (currentUserId !== comment.commentUser)
+  //   throw new AppError(
+  //     403,
+  //     "You do not have permission to perform the action",
+  //     "Delete comment Error"
+  //   );
 
   comment = await Comment.findByIdAndUpdate(
     commentId,

@@ -8,12 +8,13 @@ const userSchema = Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: false },
-    avartarUrl: { type: String, required: false, default: "" },
+    avatarUrl: { type: String, required: false, default: "" },
     role: {
       type: String,
       required: true,
       enum: ["manager", "member", "admin"],
     },
+    jobTitle: { type: String, required: false, default: "" },
     description: { type: String, required: false, default: "" },
     languages: { type: String, required: false, default: "" },
 

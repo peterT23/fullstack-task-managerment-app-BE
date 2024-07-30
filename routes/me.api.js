@@ -20,8 +20,8 @@ router.get("/", authentication.loginRequired, meController.getCurrentUser);
 - @body { name, avatarUrl, shortDescription, Phone ,Skills, Strength , Languages , jobTitle, facebookLink, instagramLink, linkedinLink, twitterLink }
 */
 
-router.patch(
-  "/",
+router.put(
+  "/:id",
   authentication.loginRequired,
   validators.validate([
     body("name", "Invalid Name").optional().isString(),
@@ -35,6 +35,14 @@ router.patch(
       .optional()
       .isString()
       .withMessage("Description must be a string"),
+    body("jobTitle")
+      .optional()
+      .isString()
+      .withMessage("JobTitle must be a string"),
+    body("avatarUrl")
+      .optional()
+      .isString()
+      .withMessage("AvatarUrl must be a string"),
     body("languages")
       .optional()
       .isString()
@@ -52,7 +60,8 @@ router.patch(
       .optional()
       .isString()
       .withMessage("facbook Link must be a string"),
+    param("id").exists().isString().custom(validators.checkObjectId),
   ]),
-  meController.updateUserProfile
+  meController.updateMeProfile
 );
 module.exports = router;
