@@ -23,15 +23,13 @@ router.post(
       .notEmpty()
       .withMessage("comment must be a required string"),
     body("referenceDocument")
-      .exists()
       .isString()
       .optional()
       .withMessage("reference must be a required string"),
     body("documentType")
-      .exists()
       .isString()
-      .isIn(["image", "raw"])
-      .withMessage("reference must be a required string"),
+      .optional()
+      .withMessage("documentType must be a string"),
     body("taskId", "Invalid task Id")
       .exists()
       .isString()

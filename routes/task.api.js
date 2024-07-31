@@ -140,6 +140,14 @@ router.delete(
 );
 
 /**
+ * @route GET /tasks?page=1&limit=10
+ * @description Get tasks
+ * @access Login required
+ */
+
+router.get("/", authentication.loginRequired, taskController.getTasks);
+
+/**
  * @route GET /tasks/:id
  * @description Get details of a task
  * @access Login require

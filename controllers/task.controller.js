@@ -35,6 +35,61 @@ const calculateTaskInProject = async (projectId) => {
   });
   await Project.findByIdAndUpdate(projectId, { taskCount }, { new: true });
 };
+
+/**
+ * @route GET /tasks?page=1&limit=10
+ * @description Get tasks
+ * @access Login required
+ */
+
+taskController.getTasks = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
+  let { page, limit, ...filter } = { ...req.query };
+
+  page = parseInt(page) || 1;
+  limit = parseInt(limit) || 10;
+
+  const filterConditions = [{ isDeleted: false }];
+
+  if (filter.title) {
+    filterConditions.push({
+      title: { $regex: filter.title, $options: "i" }, //case sensitive
+    });
+  }
+
+  // if (
+  //   filter.status &&
+  //   ["pending", "ongoing", "review", "done", "archive"].includes(filter.status)
+  // ) {
+  //   filterConditions.push({
+  //     status: filter.status,
+  //   });
+  // }
+  const filterCriteria = filterConditions.length
+    ? { $and: filterConditions }
+    : {};
+
+  const count = await Task.countDocuments(filterCriteria);
+  const totalPages = Math.ceil(count / limit);
+  const offset = limit * (page - 1);
+
+  let tasks = await Task.find(filterCriteria)
+    .sort({ createdAt: -1 })
+    .skip(offset)
+    .limit(limit)
+    .populate("assignees")
+    .populate("projectId");
+
+  return sendResponse(
+    res,
+    200,
+    true,
+    { tasks, totalPages, count },
+    null,
+    "get users successfull"
+  );
+});
+
 /**
  * @route POST /tasks
  * @description create a new task
@@ -263,6 +318,7 @@ taskController.deleteSingleTask = catchAsync(async (req, res, next) => {
     { $set: { isDeleted: true } },
     { new: true }
   );
+
   // update taskCount for each assignees
   const assignees = task.assignees;
   if (assignees && assignees.length > 0) {
@@ -453,7 +509,7 @@ taskController.getCommentsOfTask = catchAsync(async (req, res, next) => {
   const count = await Comment.countDocuments({ taskId });
   const totalPages = Math.ceil(count / limit);
   const offset = limit * (page - 1);
-  const comments = await Comment.find({ taskId })
+  const comments = await Comment.find({ taskId, isDeleted: false })
     .sort({ createdAt: -1 })
     .skip(offset)
     .limit(limit)
