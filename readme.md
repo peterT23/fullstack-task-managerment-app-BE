@@ -14,51 +14,46 @@ After joining, users can manage their profiles, view and manage tasks, receive n
 
 ### Manager
 
-- [ ] As a manager, I want to be able to invite new team members to set up their accounts with their provided information (email, name).
+- [ ] As a manager, I want to be able to invite new team members and set up their accounts with their provided information (email, name).
 - [ ] As a manager, I want to be able to create a Project that will include task further
 - [ ] As a manager, I want to be able to add or invite user to team Members of the project
-- [ ] As a manager, I want to be able to create and assign tasks to specific team members .
+- [ ] As a manager, I want to be able to create and assign and unassign tasks to specific team members .
+- [ ] As a manager, I want to be able to provide descriptions, set priorities, and deadlines for each project.
 - [ ] As a manager, I want to be able to provide descriptions, set priorities, and deadlines for each task.
 - [ ] As a manager, I want to be able to create projects that group related tasks together.
 - [ ] As a manager, I want to be able to view my team's tasks by assignee, status, project, and priority.
 - [ ] As a manager, I want to be able to monitor task progress and update tasks as needed.
-- [ ] As a manager, I want to be able to receive notifications and reminders related to the tasks I created.
 
 ### Team Member
 
-- [ ] As a team member, I want to be able to set up my account through an invitation.
+- [ ] As a team member, I want to be able to login and edit my account profile.
 - [ ] As a team member, I want to be able to log in and out of my account.
 - [ ] As a team member, I want to be able to view my assigned tasks, deadlines, and priorities in one place.
-- [ ] As a team member, I want to be able to receive notifications and reminders related to my tasks.
-- [ ] As a team member, I want to be able to update the status of my tasks, mark them as complete, and provide comments or notes as necessary.
+- [ ] As a team member, I want to be able to create the comment to the tasks, mark them as complete.
 - [ ] As a team member, I want to be able to collaborate with my team members by sharing files or resources related to the tasks.
 
 ### Authentication
 
 - [ ] As a manager, I can create an account and log in/out of the manager’s app.
-- [ ] As a team member, I can set up my account through a manager’s email invitation.
+- [ ] As a manager, I can create member account.
+- [ ] As a team member, I can login my account through a created account by manager
 - [ ] As a team member, I can log in and out of the app using my credentials.
 
-### Task Management
+### Project and Management
 
 - [ ] As a manager, I can create a project with a title and description, and add tasks to it.
 - [ ] As a manager, I can create new tasks by entering a title, description, and selecting a project or category.
-- [ ] As a manager, I can view projects and tasks in different views (by project, by assignee, by status, etc.).
+- [ ] As a manager, I can view projects and tasks in different views.
 - [ ] As a manager, I can assign tasks to myself or to team members by selecting from a list of users.
 - [ ] As a manager, I can add priority and deadline to tasks.
 - [ ] As a team member, I can view all my assigned tasks in one place.
-- [ ] As a team member, I can assign tasks to myself if the created task doesn’t have an assignee.
-- [ ] As a team member, I can update the status of my assigned tasks as they progress.
+- [ ] As a team member, I can update the status of my assigned tasks as their progress.
 
 ### Team Collaboration
 
 - [ ] As a team member, I can view other members’ tasks.
 - [ ] As a team member or manager, I can leave comments on other members' tasks.
-
-### Reminder & Notification
-
-- [ ] As a manager, I can receive in-app notifications about task status updates by team members.
-- [ ] As a team member, I can receive in-app notifications about changes made by my manager to my tasks.
+- [ ] As a team member or manager, I can share reference document on other members' tasks or my task.
 
 ## Endpoint APIs
 
@@ -71,6 +66,25 @@ After joining, users can manage their profiles, view and manage tasks, receive n
  * @body {email, password, role}
  * @access Public
  */
+```
+
+### Me APIs
+
+```javascript
+/**
+- @route GET /me
+- @description Get current user info
+- @access Login required
+*/
+```
+
+```javascript
+/**
+- @route PUT /me
+- @description UPDATE USER PROFILE
+- @access Login required
+- @body { name, avatarUrl, shortDescription, Phone , Languages , jobTitle, facebookLink, instagramLink, linkedinLink, twitterLink }
+*/
 ```
 
 ### User APIs
@@ -89,7 +103,7 @@ After joining, users can manage their profiles, view and manage tasks, receive n
  * @route POST /users/member
  * @description Register new user for team member. only manager can do
  * @body {name, email, password, role}
- * @access Public
+ * @access manager login required
  */
 ```
 
@@ -99,14 +113,6 @@ After joining, users can manage their profiles, view and manage tasks, receive n
  * @description Get user with page and limit and search by name
  * @access Login required
  */
-```
-
-```javascript
-/**
-- @route GET /users/me
-- @description Get current user info
-- @access Login required
-*/
 ```
 
 ```javascript
@@ -123,15 +129,6 @@ After joining, users can manage their profiles, view and manage tasks, receive n
 
 - @route Delete /users/:id
 - @description delete user(member) 
-- @access Login required
-*/
-```
-
-```javascript
-/**
-- @route PUT /users/:id
-- @description Update user profile (edit user profile)
-- @body { name, avatarUrl, shortDescription, Phone ,Skills, Strength , Languages , jobTitle, facebookLink, instagramLink, linkedinLink, twitterLink }
 - @access Login required
 */
 ```
@@ -186,8 +183,56 @@ After joining, users can manage their profiles, view and manage tasks, receive n
 
 ```javascript
 /**
+ * @route put /projects/:id/assign
+ * @description // Assign project to user by ID
+ * @access Login required
+ */
+```
+
+```javascript
+/**
+ * @route put /projects/:id/assignees
+ * @description // Assign project to users by ID
+ * @access Login required
+ */
+```
+
+```javascript
+/**
+ * @route put /projects/:id/unassign
+ * @description // unAssign project from user by ID
+ * @access Login required
+ */
+```
+
+```javascript
+/**
  * @route GET /projects/:id/tasks
  * @description Get tasks of a projects
+ * @access Login required
+ */
+```
+
+```javascript
+/**
+ * @route GET /projects/:id/tasks/status
+ * @description Get tasks of a projects by status
+ * @access Login required
+ */
+```
+
+```javascript
+/**
+ * @route GET /projects/:id/tasks/status
+ * @description Get tasks of a projects by status
+ * @access Login required
+ */
+```
+
+```javascript
+/**
+ * @route PUT /projects/:id/tasks/reorder
+ * @description update  task order, task status  of a projects by drag and drop feature
  * @access Login required
  */
 ```
@@ -195,6 +240,14 @@ After joining, users can manage their profiles, view and manage tasks, receive n
 ### Task API
 
 <!-- the actions related directly to edit, create, delete task must be handle by manager -->
+
+```javascript
+/**
+ * @route GET /tasks?page=1&limit=10
+ * @description Get tasks
+ * @access Login required
+ */
+```
 
 ```javascript
 /**
@@ -208,7 +261,7 @@ After joining, users can manage their profiles, view and manage tasks, receive n
 /**
  * @route POST /tasks
  * @description create a new task
- * @body { title, description, startdate,enddate, status, projectID, createdBy, AssignedTo ,priority }
+ * @body { title, description, startdate,enddate, status, projectID, createdBy, assignees ,priority }
  * @access Login required
  * /
 ```
@@ -220,6 +273,22 @@ After joining, users can manage their profiles, view and manage tasks, receive n
  *{ title, description, startdate,enddate, status, createdBy, AssignedTo , priority}
  * @access Login required
  * /
+```
+
+```javascript
+/**
+ * @route put /tasks/:id/assign
+ * @description // Assign task to user by ID
+ * @access Login required
+ */
+```
+
+```javascript
+/**
+ * @route put /projects/:id/unassign
+ * @description // unAssign task from user by ID
+ * @access Login required
+ */
 ```
 
 ```javascript
@@ -244,7 +313,7 @@ After joining, users can manage their profiles, view and manage tasks, receive n
 /**
  * @route POST /comments
  * @description create new comments
- * @body {comment, commentDate, TaskID, commentUser}
+ * @body {comment, TaskID, commentUser,referenceDocument}
  * @access Login required
  * /
 ```
@@ -253,7 +322,7 @@ After joining, users can manage their profiles, view and manage tasks, receive n
 /**
  * @route PUT /comments/:id
  * @description edit comment
- * @body {comment, commentDate}
+ * @body {comment}
  * @access Login required
  * /
 ```
@@ -272,78 +341,4 @@ After joining, users can manage their profiles, view and manage tasks, receive n
  * @description get details of comment
  * @access Login required
  * /
-```
-
-### referenceDocument API
-
-```javascript
-/**
- * @route POST /references
- * @description Save a reference document to task or comment
- * @body { targetType: 'task' or 'Comment', targetId, name, referenceDocumentUrl }
- * @access Login required
- * /
-```
-
-```javascript
-/**
- * @route PUT /references/:id
- * @description edit a reference document to task or comment
- * @body {  name, referenceDocumentUrl }
- * @access Login required
- * /
-```
-
-```javascript
-/**
- * @route delete /references/:id
- * @description delete a reference document of task or comment
- * @access Login required
- * /
-```
-
-```javascript
-/**
- * @route Get /references/:id
- * @description get single reference
- * @access Login required
- * /
-```
-
-### notitfications
-
-<!-- after each action above we must create a new notification  -->
-
-```javascript
-/**
- * @route POST /notifications
- * @description create new notifications
- * @body {comment, commentDate, TaskID, commentUser}
- * @access Login required
- * /
-```
-
-```javascript
-/**
- * @route PUT /notifications/:id
- * @description Edit notification
- * @body {message, isRead}
- * @access Login required
- */
-```
-
-```javascript
-/**
- * @route DELETE /notifications/:id
- * @description Delete notification
- * @access Login required
- */
-```
-
-```javascript
-/**
- * @route GET /notifications/:id
- * @description Get details of notification
- * @access Login required
- */
 ```
