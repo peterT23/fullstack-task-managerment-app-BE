@@ -342,3 +342,4 @@ After joining, users can manage their profiles, view and manage tasks, receive n
  * @access Login required
  * /
 ```
+![taskmanagement app ERD image](https://github.com/peterT23/fullstack-task-managerment-app-FE/blob/main/task_me_ERD.png)
