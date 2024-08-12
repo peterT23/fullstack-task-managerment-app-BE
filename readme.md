@@ -344,4 +344,15 @@ After joining, users can manage their profiles, view and manage tasks, receive n
 ```
 ![taskmanagement app ERD image](https://github.com/peterT23/fullstack-task-managerment-app-FE/blob/main/task_me_ERD.png)
 
-linkdemo: [https://taskme-fe.netlify.app](https://taskme-fullstack.netlify.app/)
+![task me Image](![Screenshot 2024-08-12 at 22 11 27](https://github.com/user-attachments/assets/410725d5-e7e0-4c20-b3a7-5b77ae56b107)
+
+![task me Image](![Screenshot 2024-08-12 at 22 12 14](https://github.com/user-attachments/assets/0e28d4e0-ef20-4851-8f30-c670ab533f4a)
+![Screenshot 2024-08-12 at 22 13 47](https://github.com/user-attachments/assets/da4b5638-719d-48b3-b0e7-dedad6fec742)
+![Screenshot 2024-08-12 at 22 14 18](https://github.com/user-attachments/assets/8dbfcc78-cd64-452f-ba40-eef1d18c49dd)
+![Screenshot 2024-08-12 at 22 14 39](https://github.com/user-attachments/assets/076b5761-6f59-43ec-9339-9dc4eb9f4b11)
+![Screenshot 2024-08-12 at 22 15 00](https://github.com/user-attachments/assets/87f5ed26-f139-4595-bfb8-eef9b034bdd9)
+![Screenshot 2024-08-12 at 22 15 21](https://github.com/user-attachments/assets/e0a5ddb3-0658-4e29-807d-2a69b2cba631)
+
+
+linkDemo : [https://taskme-fe.netlify.app](https://taskme-fullstack.netlify.app/)
+I am using render.com to upload my free Back-end server so it takes time to load everything on screen. please wait for it!
