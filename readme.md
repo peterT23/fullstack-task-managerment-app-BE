@@ -342,16 +342,39 @@ After joining, users can manage their profiles, view and manage tasks, receive n
  * @access Login required
  * /
 ```
-![taskmanagement app ERD image](https://github.com/peterT23/fullstack-task-managerment-app-FE/blob/main/task_me_ERD.png)
+## TASK ME ERD diagram
+![taskme ERD image](https://github.com/peterT23/fullstack-task-managerment-app-FE/blob/main/task_me_ERD.png)
 
-![task me Image](![Screenshot 2024-08-12 at 22 11 27](https://github.com/user-attachments/assets/410725d5-e7e0-4c20-b3a7-5b77ae56b107)
+## Image of Project
+<img width="1440" alt="Screenshot 2024-08-12 at 22 37 17" src="https://github.com/user-attachments/assets/21a938c1-f850-42a1-9a0e-8de503218a73">
+<img width="1440" alt="Screenshot 2024-08-12 at 22 37 11" src="https://github.com/user-attachments/assets/4d2e27db-a746-4f45-961e-b9e669cbfab0">
+<img width="1440" alt="Screenshot 2024-08-12 at 22 37 02" src="https://github.com/user-attachments/assets/71a2c538-1eeb-4ff8-aa28-6ace428dc600">
+<img width="1440" alt="Screenshot 2024-08-12 at 22 36 54" src="https://github.com/user-attachments/assets/723894a1-0c65-4b46-801a-0bb412a9a004">
+<img width="1440" alt="Screenshot 2024-08-12 at 22 36 47" src="https://github.com/user-attachments/assets/3ececd1f-dd9a-4026-a956-d8873f1afbab">
+<img width="1440" alt="Screenshot 2024-08-12 at 22 36 37" src="https://github.com/user-attachments/assets/dfa563c4-6def-480c-8145-44fcb8cdc94e">
 
-![task me Image](![Screenshot 2024-08-12 at 22 12 14](https://github.com/user-attachments/assets/0e28d4e0-ef20-4851-8f30-c670ab533f4a)
-![Screenshot 2024-08-12 at 22 13 47](https://github.com/user-attachments/assets/da4b5638-719d-48b3-b0e7-dedad6fec742)
-![Screenshot 2024-08-12 at 22 14 18](https://github.com/user-attachments/assets/8dbfcc78-cd64-452f-ba40-eef1d18c49dd)
-![Screenshot 2024-08-12 at 22 14 39](https://github.com/user-attachments/assets/076b5761-6f59-43ec-9339-9dc4eb9f4b11)
-![Screenshot 2024-08-12 at 22 15 00](https://github.com/user-attachments/assets/87f5ed26-f139-4595-bfb8-eef9b034bdd9)
-![Screenshot 2024-08-12 at 22 15 21](https://github.com/user-attachments/assets/e0a5ddb3-0658-4e29-807d-2a69b2cba631)
+## Tech stacks
+
+## Tech Stack
+
+### Frontend
+- ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) **ReactJS**: A JavaScript library for building user interfaces.
+- ![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-EC5990?style=for-the-badge&logo=reacthookform&logoColor=white) **React Hook Form**: For handling form inputs with minimal re-renders.
+- ![React Router](https://img.shields.io/badge/React%20Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white) **React Router DOM**: For routing and navigation between views.
+- ![Yup](https://img.shields.io/badge/Yup-ffac45?style=for-the-badge) **Yup Validator**: For schema validation and form data validation.
+- ![Redux](https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white) **Redux Toolkit**: For efficient state management.
+- ![DnD Kit](https://img.shields.io/badge/DnD%20Kit-4B0082?style=for-the-badge&logo=html5&logoColor=white) **DnD Kit**: For drag-and-drop functionality.
+- ![Material-UI](https://img.shields.io/badge/Material%20UI-0081CB?style=for-the-badge&logo=mui&logoColor=white) **Material-UI**: For sleek, responsive UI components.
+
+### Backend
+- ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node-dot-js&logoColor=white) **Node.js**: For running JavaScript on the server.
+- ![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge) **Express.js**: A web application framework for Node.js.
+- ![Express Validator](https://img.shields.io/badge/Express%20Validator-ff6347?style=for-the-badge) **Express Validator**: For validating and sanitizing form data.
+- ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white) **MongoDB**: A NoSQL database for storing application data.
+
+These technologies together provide a robust foundation for building a fully-featured task management application.
+
+
 
 
 linkDemo : [https://taskme-fe.netlify.app](https://taskme-fullstack.netlify.app/)
